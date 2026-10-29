@@ -51,8 +51,16 @@
   <li>Pulsa <strong>Conectar</strong>, entra con tu cuenta de Repe y elige los permisos. El conector también aparecerá en la app de Claude del móvil.</li>
 </ol>
 
-<h2>Claude Desktop, Claude Code y Cursor</h2>
-<p>Estos programas pueden usar el inicio de sesión de arriba o una <strong>clave personal</strong>. Para la clave: en la app, <strong>Ajustes → Cuenta → Conexiones y API → Nueva clave</strong>, y luego <strong>Conectar a una IA (MCP)</strong>: copia la configuración lista para pegar.</p>
+<h2>Claude Code y Cursor</h2>
+<p>También inician sesión con tu cuenta de Repe, sin claves:</p>
+<ul>
+  <li><strong>Claude Code</strong>: <code>claude mcp add --transport http repe https://vazvpvtxljbjyhtmrglo.supabase.co/functions/v1/api/mcp</code> y, dentro de Claude Code, <code>/mcp</code> → Repe → <strong>Autenticar</strong>.</li>
+  <li><strong>Cursor</strong>: en <code>mcp.json</code>, <code>{ "mcpServers": { "repe": { "url": "https://vazvpvtxljbjyhtmrglo.supabase.co/functions/v1/api/mcp" } } }</code> y pulsa <strong>Conectar</strong> en los ajustes de MCP.</li>
+</ul>
+<p>Claude Desktop usa los mismos conectores que claude.ai: si ya lo has añadido allí, aparece solo.</p>
+
+<h2>Claves personales (avanzado)</h2>
+<p>Para programas que no pueden iniciar sesión (scripts, Atajos de iOS, automatizaciones) hay claves personales: en la app, <strong>Ajustes → Cuenta → Conexiones y API → Nueva clave</strong>. Al crearla puedes copiar la configuración para Claude Desktop, Claude Code o Cursor con la clave dentro. Si usas ChatGPT o Claude no necesitas ninguna.</p>
 
 <h2>Qué puede hacer</h2>
 <ul>
