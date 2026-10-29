@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guardar tus entrenos en Salud · Repe</title>
+<meta name="description" content="Cómo montar un atajo de iOS que guarda tus entrenos de Repe en Salud y Fitness como fuerza tradicional, con hora, duración y calorías estimadas.">
+<meta name="theme-color" content="#0F1012">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="logo.svg" alt="">Repe</a>
+    <nav>
+      <a href="conectar">Conectar a una IA</a>
+      <a href="salud">Salud</a>
+      <a href="privacidad">Privacidad</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+<h1>Guardar tus entrenos en Salud</h1>
+<p class="lead">Con un atajo de iOS, cada entreno que terminas en Repe se guarda en Salud y en Fitness como <strong>Fuerza tradicional</strong>: hora de inicio, duración y calorías estimadas. Se monta una vez, en unos 5 minutos, y después funciona solo.</p>
+
+<div class="notice">
+  El atajo solo <strong>lee</strong> tus entrenos (usa una clave de solo lectura) y no envía nada a nadie más: los guarda en Salud desde tu iPhone.
+  Repe no lee nada de Salud. Las calorías son una estimación (peso corporal × duración × intensidad, la que elijas en Ajustes); sin peso corporal apuntado, el entreno se guarda sin calorías.
+</div>
+
+<h2>1. Crea la clave en Repe</h2>
+<ol>
+  <li>En Repe, abre <strong>Ajustes → Cuenta → Conexiones y API</strong>.</li>
+  <li>En «Guardar entrenos en Salud», pulsa <strong>Crear clave para el atajo</strong>.</li>
+  <li>Copia la clave (empieza por <code>repe_sk_</code>). Solo se ve una vez: si la pierdes, revócala y crea otra.</li>
+</ol>
+
+<h2>2. Crea el atajo</h2>
+<p>En la app <strong>Atajos</strong>, pulsa <strong>+</strong>, llámalo <code>Repe → Salud</code> y añade estas acciones en orden:</p>
+<ol>
+  <li>
+    <strong>Obtener contenido de URL</strong> con esta URL (en Repe, «Copiar dirección para el atajo»):
+    <pre><code>https://vazvpvtxljbjyhtmrglo.supabase.co/functions/v1/api/v1/health/pending</code></pre>
+    Pulsa la flecha para ver más opciones, deja el método en <strong>GET</strong> y añade una cabecera:
+    clave <code>Authorization</code>, valor <code>Bearer repe_sk_…</code> (la palabra <code>Bearer</code>, un espacio y tu clave).
+  </li>
+  <li><strong>Obtener valor del diccionario</strong>: valor de <code>workouts</code> en «Contenido de la URL».</li>
+  <li><strong>Repetir con cada</strong> elemento de «Valor del diccionario». Dentro del bloque:
+    <ol>
+      <li><strong>Obtener valor del diccionario</strong>: <code>start</code> de «Elemento de repetición». Después, <strong>Obtener fechas de la entrada</strong> con ese valor.</li>
+      <li><strong>Obtener valor del diccionario</strong>: <code>duration_min</code> de «Elemento de repetición».</li>
+      <li><strong>Obtener valor del diccionario</strong>: <code>kcal</code> de «Elemento de repetición».</li>
+      <li><strong>Registrar entrenamiento</strong> (<em>Log Workout</em>; en el apartado Salud): tipo <strong>Fuerza tradicional</strong>; fecha de inicio = las fechas del paso 1; duración = el valor de <code>duration_min</code>, con la unidad en <strong>minutos</strong>; energía = el valor de <code>kcal</code> (en kcal). Para elegir cada valor, mantén pulsado el campo y elige la variable.</li>
+      <li><strong>Obtener contenido de URL</strong>: <code>https://vazvpvtxljbjyhtmrglo.supabase.co/functions/v1/api/v1/health/exported</code>, método <strong>POST</strong>, la misma cabecera <code>Authorization</code> y cuerpo <strong>JSON</strong> con un campo de texto <code>id</code> = el valor <code>id</code> de «Elemento de repetición». Esto le dice a Repe que ese entreno ya está en Salud, para no guardarlo dos veces.</li>
+    </ol>
+  </li>
+</ol>
+<p>Pulsa ▶︎ para probarlo. La primera vez, iOS pide permiso para que Atajos escriba entrenamientos en Salud: acéptalo. Si no tienes entrenos de los últimos 3 días, no hará nada (es lo normal).</p>
+
+<h2>3. Que se ejecute solo</h2>
+<ol>
+  <li>En Atajos, pestaña <strong>Automatización</strong> → <strong>+</strong> → <strong>App</strong>.</li>
+  <li>Elige <strong>Repe</strong> y marca <strong>Se cierra</strong>. Elige <strong>Ejecutar inmediatamente</strong> (sin preguntar).</li>
+  <li>Acción: <strong>Ejecutar atajo</strong> → <code>Repe → Salud</code>.</li>
+</ol>
+<p>Así, al salir de Repe tras terminar un entreno, se guarda en Salud. Si en ese momento no hay conexión, no pasa nada: se guardará la próxima vez (mira los entrenos de los últimos 3 días).</p>
+
+<h2>Guardar también los entrenos antiguos</h2>
+<p>Por defecto solo se guardan los de los últimos 3 días, para no llenar Salud de golpe. Para pasar el historial, ejecuta una vez el atajo cambiando la primera URL por <code>https://vazvpvtxljbjyhtmrglo.supabase.co/functions/v1/api/v1/health/pending?days=365&amp;limit=50</code> (varias veces si tienes más de 50) y vuelve a dejarla como estaba.</p>
+
+<h2>Si algo no va</h2>
+<ul>
+  <li><strong>No aparece nada en Salud</strong>: en Ajustes del iPhone → <strong>Salud → Acceso a datos y dispositivos → Atajos</strong>, activa Entrenamientos y Energía activa.</li>
+  <li><strong>La duración sale como 0 s</strong> (fallo conocido de Atajos): comprueba que la unidad de la duración está en minutos y que el valor viene de <code>duration_min</code>. Si sigue igual, pon <strong>0</strong> en «Distancia». Si tampoco, borra ese entreno en Salud y avísanos.</li>
+  <li><strong>Error 401</strong>: la clave está mal copiada o revocada. Revisa que la cabecera sea <code>Bearer repe_sk_…</code>.</li>
+  <li><strong>Un entreno se ha guardado dos veces</strong>: pasa si el paso de marcar falló. Bórralo en Salud (Salud → Actividad → Entrenamientos).</li>
+  <li>Si corriges o borras un entreno en Repe después, en Salud no cambia: corrígelo o bórralo allí.</li>
+</ul>
+
+<h2>Para programadores</h2>
+<p><code>GET /v1/health/pending?days=3&amp;limit=20</code> → <code>{ count, has_more, workouts: [{ id, title, start, end, duration_s, duration_min, kcal }] }</code> (los más antiguos primero; <code>kcal</code> puede ser <code>null</code>). <code>POST /v1/health/exported</code> con <code>{ "id": "…" }</code> o <code>{ "ids": [...] }</code>. Basta una clave de solo lectura. Más en <a href="https://vazvpvtxljbjyhtmrglo.supabase.co/functions/v1/api/v1/openapi.json">openapi.json</a>.</p>
+
+  </div>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Repe</span>
+    <a href="terminos">Términos</a>
+    <a href="privacidad">Privacidad</a>
+    <a href="creditos">Créditos</a>
+    <a href="conectar">Conectar a una IA</a>
+    <a href="salud">Salud</a>
+  </div>
+</footer>
+</body>
+</html>
