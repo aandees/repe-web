@@ -27,7 +27,7 @@
 <main>
   <div class="wrap">
 <h1>Conectar Repe a una IA</h1>
-<p class="lead">Repe tiene un servidor MCP: tu asistente de IA puede leer tus entrenos, récords y medidas para analizar tu progreso y, si se lo permites, crearte rutinas o apuntar medidas.</p>
+<p class="lead">Repe tiene un servidor MCP (Model Context Protocol, el estándar para conectar datos a una IA): cualquier asistente compatible puede leer tus entrenos, récords y medidas para analizar tu progreso y, si se lo permites, crearte rutinas o apuntar medidas.</p>
 
 <p>Dirección del servidor:</p>
 <pre><code>https://vazvpvtxljbjyhtmrglo.supabase.co/functions/v1/api/mcp</code></pre>
@@ -62,7 +62,10 @@
 <p>Claude Desktop usa los mismos conectores que claude.ai: si ya lo has añadido allí, aparece solo.</p>
 
 <h2>Claves personales (avanzado)</h2>
-<p>Para programas que no pueden iniciar sesión (scripts, Atajos de iOS, automatizaciones) hay claves personales: en la app, <strong>Ajustes → Cuenta → Conexiones y API → Nueva clave</strong>. Al crearla puedes copiar la configuración para Claude Desktop, Claude Code o Cursor con la clave dentro. Si usas ChatGPT o Claude no necesitas ninguna.</p>
+<p>Para programas que no pueden iniciar sesión (scripts, Atajos de iOS, automatizaciones) hay claves personales: en la app, <strong>Ajustes → Cuenta → Conexiones y API → Nueva clave</strong>. Al crearla puedes copiar la configuración para Claude Desktop, Claude Code o Cursor con la clave dentro. Si tu asistente permite iniciar sesión, no necesitas ninguna.</p>
+
+<h2>Otros asistentes</h2>
+<p>Funciona con cualquier asistente o programa que admita servidores MCP remotos con inicio de sesión OAuth (por ejemplo VS Code con Copilot, Gemini CLI, Windsurf o Le Chat de Mistral): añade un servidor o conector MCP con la dirección de arriba y, cuando lo pida, entra con tu cuenta de Repe.</p>
 
 <h2>Qué puede hacer</h2>
 <ul>
