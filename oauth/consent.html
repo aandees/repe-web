@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conectar con Repe</title>
+<meta name="description" content="Autoriza a un asistente de IA a usar tus datos de Repe.">
+<meta name="theme-color" content="#0F1012">
+<link rel="icon" href="../logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href=".././"><img src="../logo.svg" alt="">Repe</a>
+    <nav>
+      <a href="../conectar">Conectar a una IA</a>
+      <a href="../privacidad">Privacidad</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+<!-- Página de consentimiento del servidor OAuth de Supabase Auth (Authorization Path
+     `/oauth/consent`). Supabase redirige aquí con ?authorization_id=…; el usuario inicia
+     sesión, elige permisos y se aprueba con supabase.auth.oauth.approveAuthorization. Los
+     permisos de Repe (read, write:…) se guardan con `grant_oauth_client`: la API los lee de
+     ahí (los scopes OAuth de Supabase solo son openid/email/profile). -->
+<div class="panel">
+  <p id="loading" class="muted">Cargando…</p>
+
+  <section id="fatal" hidden>
+    <h1>No se puede conectar</h1>
+    <p id="fatal-text" class="muted"></p>
+  </section>
+
+  <section id="login" hidden>
+    <h1>Entra en Repe</h1>
+    <p class="muted">Para conectar tu cuenta, entra con tu email o nombre de usuario.</p>
+    <form id="login-form">
+      <label class="field"><span>Email o nombre de usuario</span>
+        <input id="identifier" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
+      <label class="field"><span>Contraseña</span>
+        <input id="password" type="password" autocomplete="current-password" required></label>
+      <p id="login-error" class="error" role="alert"></p>
+      <button class="button block" type="submit" id="login-button">Entrar</button>
+    </form>
+    <p class="small muted">¿No tienes cuenta o has olvidado la contraseña? Hazlo desde la app de Repe.</p>
+  </section>
+
+  <section id="consent" hidden>
+    <div class="app">
+      <img id="client-logo" alt="" hidden>
+      <div>
+        <h1 style="font-size:1.5rem;margin:0"><span id="client-name"></span> quiere acceder a tu cuenta de Repe</h1>
+      </div>
+    </div>
+    <p class="muted small">Has entrado como <strong id="user-email"></strong>. <a href="#" id="switch">Cambiar de cuenta</a></p>
+
+    <p><strong>¿Qué puede hacer?</strong></p>
+    <div class="options">
+      <label class="option"><input type="radio" name="preset" value="read" checked>
+        <span><strong>Solo leer</strong><small>Entrenos, rutinas, récords, medidas y estadísticas.</small></span></label>
+      <label class="option"><input type="radio" name="preset" value="plan">
+        <span><strong>Leer, crear rutinas y apuntar medidas</strong><small>Las rutinas nuevas van a la carpeta «Sugerencias».</small></span></label>
+      <label class="option"><input type="radio" name="preset" value="all">
+        <span><strong>Todo: también registrar entrenos</strong><small>Entrenos ya hechos, privados por defecto.</small></span></label>
+    </div>
+
+    <p class="small muted">Solo tendrá acceso a tus datos. Lo que lea se envía a ese proveedor. Puedes quitar la conexión cuando quieras en la app: Ajustes → Cuenta → Conexiones y API.</p>
+    <p id="consent-error" class="error" role="alert"></p>
+    <div class="actions">
+      <button class="button block" id="approve">Permitir</button>
+      <button class="button secondary block" id="deny">Cancelar</button>
+    </div>
+  </section>
+
+  <section id="done" hidden>
+    <h1 id="done-title">Listo</h1>
+    <p class="muted">Volviendo a la aplicación…</p>
+  </section>
+</div>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/+esm';
+
+  const supabase = createClient('https://vazvpvtxljbjyhtmrglo.supabase.co', 'sb_publishable_230Uen0M4ubdSyGsXMSJRQ_h6gmtR0N');
+  const SCOPES = {
+    read: ['read'],
+    plan: ['read', 'write:routines', 'write:measurements'],
+    all: ['read', 'write:routines', 'write:measurements', 'write:workouts'],
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const show = (id) => {
+    for (const s of ['loading', 'fatal', 'login', 'consent', 'done']) $(s).hidden = s !== id;
+  };
+  const fatal = (text) => {
+    $('fatal-text').textContent = text;
+    show('fatal');
+  };
+
+  const authorizationId = new URLSearchParams(location.search).get('authorization_id');
+  let details = null;
+
+  async function load() {
+    if (!authorizationId) {
+      return fatal('Esta página se abre sola al conectar Repe desde ChatGPT, Claude u otro asistente. Empieza desde allí.');
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return show('login');
+
+    const { data, error } = await supabase.auth.oauth.getAuthorizationDetails(authorizationId);
+    if (error) {
+      if (error.status === 401 || error.status === 403) {
+        await supabase.auth.signOut();
+        return show('login');
+      }
+      return fatal('La solicitud ha caducado o no es válida. Vuelve a conectar Repe desde tu asistente.');
+    }
+    // Ya lo habías aprobado antes: se vuelve directamente.
+    if (!data.authorization_id && data.redirect_url) return finish(data.redirect_url, 'Conectado');
+
+    details = data;
+    $('client-name').textContent = data.client?.name || 'Una aplicación';
+    $('user-email').textContent = data.user?.email ?? '';
+    const logo = data.client?.logo_uri;
+    if (logo && logo.startsWith('https://')) {
+      $('client-logo').src = logo;
+      $('client-logo').hidden = false;
+    }
+    show('consent');
+  }
+
+  function finish(url, title) {
+    $('done-title').textContent = title;
+    show('done');
+    location.replace(url);
+  }
+
+  async function signIn(identifier, password) {
+    const trimmed = identifier.trim();
+    const at = trimmed.indexOf('@');
+    if (at > 0 && at < trimmed.length - 1) {
+      const { error } = await supabase.auth.signInWithPassword({ email: trimmed, password });
+      if (!error) return;
+      if (error.code === 'email_not_confirmed') throw new Error('Confirma tu email desde la app de Repe antes de conectar.');
+      throw new Error('Email o contraseña incorrectos.');
+    }
+    // Nombre de usuario: lo resuelve la Edge Function (el email nunca llega al navegador).
+    const { data, error } = await supabase.functions.invoke('sign-in-username', {
+      body: { username: trimmed.replace(/^@/, ''), password },
+    });
+    if (error) {
+      const body = await error.context?.json?.().catch(() => ({})) ?? {};
+      if (body.error === 'email_not_confirmed') throw new Error('Confirma tu email desde la app de Repe antes de conectar.');
+      if (body.error === 'invalid_credentials') throw new Error('Usuario o contraseña incorrectos.');
+      throw new Error('No se ha podido entrar. Inténtalo de nuevo.');
+    }
+    const { error: sessionError } = await supabase.auth.setSession(data);
+    if (sessionError) throw new Error('No se ha podido entrar. Inténtalo de nuevo.');
+  }
+
+  $('login-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    $('login-error').textContent = '';
+    $('login-button').disabled = true;
+    try {
+      await signIn($('identifier').value, $('password').value);
+      $('password').value = '';
+      show('loading');
+      await load();
+    } catch (e) {
+      $('login-error').textContent = e.message;
+    } finally {
+      $('login-button').disabled = false;
+    }
+  });
+
+  $('switch').addEventListener('click', async (event) => {
+    event.preventDefault();
+    await supabase.auth.signOut();
+    show('login');
+  });
+
+  $('approve').addEventListener('click', async () => {
+    $('consent-error').textContent = '';
+    $('approve').disabled = $('deny').disabled = true;
+    const preset = document.querySelector('input[name=preset]:checked')?.value ?? 'read';
+    try {
+      const { error: grantError } = await supabase.rpc('grant_oauth_client', {
+        p_client_id: details.client.id,
+        p_client_name: details.client.name || 'Asistente de IA',
+        p_scopes: SCOPES[preset],
+      });
+      if (grantError) throw grantError;
+      const { data, error } = await supabase.auth.oauth.approveAuthorization(authorizationId);
+      if (error) throw error;
+      finish(data.redirect_url, 'Conectado');
+    } catch {
+      $('consent-error').textContent = 'No se ha podido conectar. Inténtalo de nuevo.';
+      $('approve').disabled = $('deny').disabled = false;
+    }
+  });
+
+  $('deny').addEventListener('click', async () => {
+    $('approve').disabled = $('deny').disabled = true;
+    const { data, error } = await supabase.auth.oauth.denyAuthorization(authorizationId);
+    if (error) return fatal('Conexión cancelada. Ya puedes cerrar esta página.');
+    finish(data.redirect_url, 'Conexión cancelada');
+  });
+
+  load().catch(() => fatal('Algo ha fallado. Recarga la página o vuelve a conectar desde tu asistente.'));
+</script>
+
+  </div>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Repe</span>
+    <a href="../terminos">Términos</a>
+    <a href="../privacidad">Privacidad</a>
+    <a href="../creditos">Créditos</a>
+    <a href="../conectar">Conectar a una IA</a>
+  </div>
+</footer>
+</body>
+</html>

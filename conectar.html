@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conectar Repe a una IA · Repe</title>
+<meta name="description" content="Cómo conectar tus datos de Repe a ChatGPT, Claude, Cursor u otro asistente de IA con el servidor MCP de Repe.">
+<meta name="theme-color" content="#0F1012">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="logo.svg" alt="">Repe</a>
+    <nav>
+      <a href="conectar">Conectar a una IA</a>
+      <a href="privacidad">Privacidad</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+<h1>Conectar Repe a una IA</h1>
+<p class="lead">Repe tiene un servidor MCP: tu asistente de IA puede leer tus entrenos, récords y medidas para analizar tu progreso y, si se lo permites, crearte rutinas o apuntar medidas.</p>
+
+<p>Dirección del servidor:</p>
+<pre><code>https://vazvpvtxljbjyhtmrglo.supabase.co/functions/v1/api/mcp</code></pre>
+
+<div class="notice">
+  Solo da acceso a <strong>tus</strong> datos y con los permisos que elijas. Lo que la IA lea se envía a su proveedor (OpenAI, Anthropic…).
+  Puedes quitar la conexión cuando quieras en la app: <strong>Ajustes → Cuenta → Conexiones y API</strong>.
+</div>
+
+<h2>ChatGPT</h2>
+<ol>
+  <li>En ChatGPT (web), abre <strong>Ajustes → Aplicaciones y conectores → Ajustes avanzados</strong> y activa el <strong>modo desarrollador</strong>.</li>
+  <li>Vuelve a <strong>Aplicaciones y conectores</strong> y pulsa <strong>Crear</strong>.</li>
+  <li>Nombre: <code>Repe</code>. URL del servidor MCP: la de arriba. Autenticación: <strong>OAuth</strong>.</li>
+  <li>Se abrirá la página de Repe: entra con tu email o usuario y elige qué puede hacer ChatGPT.</li>
+  <li>En un chat nuevo, activa Repe en el menú <strong>+</strong> y pregunta, por ejemplo: «¿Cómo ha ido mi semana de entreno?».</li>
+</ol>
+
+<h2>Claude (claude.ai y la app móvil)</h2>
+<ol>
+  <li>En claude.ai, abre <strong>Ajustes → Conectores → Añadir conector personalizado</strong>.</li>
+  <li>Nombre: <code>Repe</code>. URL: la de arriba.</li>
+  <li>Pulsa <strong>Conectar</strong>, entra con tu cuenta de Repe y elige los permisos. El conector también aparecerá en la app de Claude del móvil.</li>
+</ol>
+
+<h2>Claude Desktop, Claude Code y Cursor</h2>
+<p>Estos programas pueden usar el inicio de sesión de arriba o una <strong>clave personal</strong>. Para la clave: en la app, <strong>Ajustes → Cuenta → Conexiones y API → Nueva clave</strong>, y luego <strong>Conectar a una IA (MCP)</strong>: copia la configuración lista para pegar.</p>
+
+<h2>Qué puede hacer</h2>
+<ul>
+  <li><strong>Leer</strong>: resumen del periodo, entrenos, progreso de cada ejercicio (y si está estancado), equilibrio muscular, rutinas, récords y medidas.</li>
+  <li><strong>Crear rutinas y apuntar medidas</strong> (si lo permites): las rutinas nuevas van a la carpeta «Sugerencias» para que las revises.</li>
+  <li><strong>Registrar entrenos ya hechos</strong> (si lo permites): calcula volumen y récords como la app. Son privados por defecto.</li>
+</ul>
+
+<h2>Para programadores</h2>
+<p>También hay una API REST con la misma clave. Documentación OpenAPI: <a href="https://vazvpvtxljbjyhtmrglo.supabase.co/functions/v1/api/v1/openapi.json">https://vazvpvtxljbjyhtmrglo.supabase.co/functions/v1/api/v1/openapi.json</a>.</p>
+
+  </div>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Repe</span>
+    <a href="terminos">Términos</a>
+    <a href="privacidad">Privacidad</a>
+    <a href="creditos">Créditos</a>
+    <a href="conectar">Conectar a una IA</a>
+  </div>
+</footer>
+</body>
+</html>
