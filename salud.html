@@ -165,6 +165,7 @@
 
 <h2>Si algo no va</h2>
 <ul>
+  <li><strong>«endDate must be after startDate»</strong>: la duración ha llegado a 0. Comprueba que en «Duración» está el valor de <code>duration_min</code> y no otro. Los entrenos de menos de 1 minuto no se envían a Salud.</li>
   <li><strong>No aparece nada en Salud</strong>: en Ajustes del iPhone → <strong>Salud → Acceso a datos y dispositivos → Atajos</strong>, activa Entrenamientos y Energía activa.</li>
   <li><strong>La duración sale como 0 s</strong> (fallo conocido de Atajos): comprueba que la unidad de la duración está en minutos, que el valor viene de <code>duration_min</code> y que la distancia no está vacía. Si sigue igual, borra ese entreno en Salud y vuelve a ejecutar el atajo.</li>
   <li><strong>Error 401 / unauthorized</strong>: la clave está mal copiada o revocada. Revisa que el valor de la cabecera sea <code>Bearer repe_sk_…</code> (con el espacio) en las DOS acciones «Obtener contenido de URL».</li>
