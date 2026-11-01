@@ -4,8 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Repe · Tu entreno, serie a serie</title>
-<meta name="description" content="Repe es una app para iPhone para registrar tus entrenamientos de gimnasio, ver tu progreso y compartirlo con tus amigos.">
-<meta name="theme-color" content="#0F1012">
+<meta name="description" content="Repe es una app para iPhone para registrar tus entrenamientos de gimnasio, ver tu progreso y compartirlo con tus amigos. Funciona sin conexión.">
+<link rel="canonical" href="https://aandees.github.io/repe-web/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Repe">
+<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="Repe · Tu entreno, serie a serie">
+<meta property="og:description" content="Repe es una app para iPhone para registrar tus entrenamientos de gimnasio, ver tu progreso y compartirlo con tus amigos. Funciona sin conexión.">
+<meta property="og:url" content="https://aandees.github.io/repe-web/">
+<meta property="og:image" content="https://aandees.github.io/repe-web/icon-512.png">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0F1012" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F6F6F7" media="(prefers-color-scheme: light)">
 <link rel="icon" href="logo.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -15,48 +25,130 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="site">
-  <div class="wrap">
-    <a class="brand" href="./"><img src="logo.svg" alt="">Repe</a>
-    <nav>
-      <a href="conectar">Conectar a una IA</a>
+  <div class="wrap wide">
+    <a class="brand" href="./"><img src="logo.svg" alt="" width="32" height="32">Repe</a>
+    <nav class="links" aria-label="Principal">
+      <a href="./#funciones">Funciones</a>
       <a href="salud">Salud</a>
-      <a href="privacidad">Privacidad</a>
+      <a href="conectar">Conectar a una IA</a>
+      <a href="ayuda">Ayuda</a>
     </nav>
+    <details class="menu">
+      <summary aria-label="Abrir el menú"><span></span><span></span><span></span></summary>
+      <nav aria-label="Menú">
+        <a href="./#funciones">Funciones</a>
+        <a href="salud">Salud</a>
+        <a href="conectar">Conectar a una IA</a>
+        <a href="ayuda">Ayuda</a>
+      </nav>
+    </details>
   </div>
 </header>
-<main>
+<main id="contenido" class="page-wide">
   <div class="wrap">
 <section class="hero">
-  <img class="logo" src="logo.svg" alt="Logo de Repe">
-  <h1>Tu entreno, serie a serie.</h1>
-  <p class="lead">Repe es una app para iPhone para apuntar tus entrenamientos de gimnasio, ver cómo progresas y compartirlo con tus amigos. Funciona sin conexión.</p>
+  <div class="hero-text">
+    <p class="eyebrow">App para iPhone · En pruebas privadas</p>
+    <h1>Tu entreno, serie a serie.</h1>
+    <p class="lead">Apunta cada serie sin perder tiempo entre descansos, mira cómo progresas y compártelo con tus amigos. Sin publicidad y sin necesidad de conexión en el gimnasio.</p>
+    <div class="cta">
+      <a class="button" href="#funciones">Ver qué hace</a>
+      <a class="button secondary" href="ayuda">Cómo conseguirla</a>
+    </div>
+  </div>
+  <figure class="phone-wrap" aria-hidden="true">
+    <div class="phone">
+      <div class="p-top"><span>Empuje A</span><b>42:18</b></div>
+      <div class="p-card">
+        <strong>Press banca</strong>
+        <div class="p-row p-head"><span>Serie</span><span>Anterior</span><span>kg</span><span>Reps</span><span></span></div>
+        <div class="p-row done"><span>1</span><span>70 × 8</span><span>72,5</span><span>8</span><i>✓</i></div>
+        <div class="p-row done"><span>2</span><span>70 × 8</span><span>72,5</span><span>8</span><i>✓</i></div>
+        <div class="p-row"><span>3</span><span>70 × 7</span><span>72,5</span><span>8-10</span><i></i></div>
+      </div>
+      <div class="p-pr">Nuevo récord · 1RM estimado</div>
+      <div class="p-card">
+        <strong>Press inclinado</strong>
+        <div class="p-row"><span>1</span><span>26 × 10</span><span>26</span><span>8-12</span><i></i></div>
+      </div>
+      <div class="p-rest"><span>Descanso</span><b>1:24</b></div>
+    </div>
+  </figure>
 </section>
 
-<div class="grid">
-  <div class="card"><h3>Rutinas</h3><p>Carpetas, superseries, rangos de repeticiones y doble progresión: te avisa cuando toca subir peso.</p></div>
-  <div class="card"><h3>Entreno en directo</h3><p>Sugerencias de la vez anterior, descansos con aviso y el entreno en la pantalla de bloqueo.</p></div>
-  <div class="card"><h3>Récords y progreso</h3><p>1RM estimado, mejores series, gráficas por ejercicio, medidas corporales y fotos de progreso privadas.</p></div>
-  <div class="card"><h3>Mapa muscular</h3><p>Qué músculos trabajas cada semana y cuáles se te quedan atrás.</p></div>
-  <div class="card"><h3>Con amigos</h3><p>Sigue a tus amigos, comenta sus entrenos y compara vuestro progreso.</p></div>
-  <div class="card"><h3>Tus datos, tuyos</h3><p>Exporta todo, usa la API o conecta Repe a tu asistente de IA. <a href="conectar">Cómo se hace</a>. También puedes <a href="salud">guardar tus entrenos en Salud</a>.</p></div>
-</div>
+<section id="funciones" class="block">
+  <p class="eyebrow">Funciones</p>
+  <h2>Todo lo que necesitas entre serie y serie</h2>
+  <div class="grid">
+    <article class="card"><h3>Rutinas a tu manera</h3><p>Carpetas, superseries, rangos de repeticiones y doble progresión: Repe te avisa cuando toca subir peso.</p></article>
+    <article class="card"><h3>Entreno en directo</h3><p>Lo que hiciste la última vez a la vista, descansos con aviso y el entreno en la pantalla de bloqueo y en la Isla Dinámica.</p></article>
+    <article class="card"><h3>Récords y progreso</h3><p>1RM estimado, mejores series y gráficas por ejercicio, con avisos en el momento en que bates una marca.</p></article>
+    <article class="card"><h3>Mapa muscular</h3><p>Qué músculos trabajas cada semana y cuáles se te están quedando atrás.</p></article>
+    <article class="card"><h3>Medidas y fotos</h3><p>Peso, medidas corporales y fotos de progreso con comparación antes y después. Solo las ves tú.</p></article>
+    <article class="card"><h3>Con tus amigos</h3><p>Sigue a tus amigos, comenta sus entrenos, copia sus rutinas y comparad vuestro progreso.</p></article>
+  </div>
+</section>
 
-<div class="notice">
-  Repe está en pruebas privadas: de momento solo se instala por invitación. Sin publicidad ni rastreadores.
-</div>
+<section class="block split">
+  <div>
+    <p class="eyebrow">Sin conexión</p>
+    <h2>El sótano del gimnasio no es un problema</h2>
+    <p class="muted">Todo se guarda primero en tu iPhone. Puedes entrenar sin cobertura y Repe lo sincroniza cuando vuelves a tener conexión.</p>
+  </div>
+  <div>
+    <p class="eyebrow">Privacidad</p>
+    <h2>Tus datos son tuyos</h2>
+    <p class="muted">Sin publicidad ni rastreadores. Tus medidas, fotos de progreso y calorías no las ve nadie más. Puedes exportarlo todo o borrar tu cuenta desde la app.</p>
+    <a href="privacidad">Leer la política de privacidad</a>
+  </div>
+</section>
+
+<section class="block">
+  <p class="eyebrow">Conecta Repe</p>
+  <h2>Tus entrenos, donde los quieras</h2>
+  <div class="grid two">
+    <a class="card link" href="salud"><h3>Apple Salud y Fitness</h3><p>Un atajo de iOS guarda tus entrenos terminados con su duración y calorías estimadas.</p><span>Ver la guía →</span></a>
+    <a class="card link" href="conectar"><h3>Tu asistente de IA</h3><p>Conecta ChatGPT o Claude para analizar tu progreso y, si se lo permites, crearte rutinas.</p><span>Ver la guía →</span></a>
+  </div>
+</section>
+
+<section class="block closing">
+  <h2>Repe está en pruebas privadas</h2>
+  <p class="muted">De momento se instala por invitación. Si quieres probarla, habla con quien te haya hablado de ella.</p>
+  <a class="button secondary" href="ayuda">Preguntas frecuentes</a>
+</section>
 
   </div>
 </main>
 <footer class="site">
-  <div class="wrap">
-    <span>© 2026 Repe</span>
-    <a href="terminos">Términos</a>
-    <a href="privacidad">Privacidad</a>
-    <a href="creditos">Créditos</a>
-    <a href="conectar">Conectar a una IA</a>
-    <a href="salud">Salud</a>
+  <div class="wrap wide">
+    <div class="foot-brand">
+      <a class="brand" href="./"><img src="logo.svg" alt="" width="24" height="24">Repe</a>
+      <p>Tu entreno, serie a serie.</p>
+    </div>
+    <nav aria-label="Producto">
+      <h2>Producto</h2>
+      <a href="./#funciones">Funciones</a>
+      <a href="salud">Guardar en Salud</a>
+      <a href="conectar">Conectar a una IA</a>
+      <a href="ayuda">Ayuda</a>
+    </nav>
+    <nav aria-label="Legal">
+      <h2>Legal</h2>
+      <a href="privacidad">Privacidad</a>
+      <a href="terminos">Términos</a>
+      <a href="creditos">Créditos</a>
+    </nav>
+    <p class="copyright">© 2026 Repe</p>
   </div>
 </footer>
+<script>
+  // En el móvil, el menú se cierra al elegir una opción (también si es un enlace a esta misma página).
+  document.querySelectorAll('details.menu a').forEach((a) =>
+    a.addEventListener('click', () => a.closest('details').removeAttribute('open')),
+  );
+</script>
 </body>
 </html>
